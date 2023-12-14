@@ -12,10 +12,8 @@ using Distributed
 @everywhere using SharedArrays
 @everywhere using StatsBase
 
-Random.seed!(2024)
-
 ## Define GRNSim function
-function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, rng_seed = 2024, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
+function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
     addprocs(ncores)
 
     ## Define interaction matrix, parameters, functions
