@@ -12,10 +12,10 @@ using Distributed
 @everywhere using SharedArrays
 @everywhere using StatsBase
 
-## Define GRNSim function
-@everywhere function RunGRN(;n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, rng_seed = 2024, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
+Random.seed!(rng_seed)
 
-    Random.seed!(rng_seed)
+## Define GRNSim function
+function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, rng_seed = 2024, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
     addprocs(ncores)
 
     ## Define interaction matrix, parameters, functions
@@ -76,7 +76,7 @@ using Distributed
 end
 
 t_start = now()
-result = RunGRN(; ncores = 8, n_tf = 100, n_iter = 1000)
+result = RunGRN(; ncores = 8)
 t_end = now()
 elapsed = canonicalize(t_end - t_start)
 print("\n"); print(elapsed); print("\n")
@@ -84,9 +84,7 @@ print("\n"); print(elapsed); print("\n")
 ## PCA of equlibria (final states)
 fin_svd = svd(result)
 p_pca = plot(fin_svd.V[:, 1], fin_svd.V[:, 2], seriestype=:scatter, legend = false)
-display(p_pca)
-
-
+savefig(p_pca, "~/Desktop/Julia_Plot_Test.pdf")
 
 
 
