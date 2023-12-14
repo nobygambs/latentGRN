@@ -1,7 +1,6 @@
 ## Set up workspace
 using Pkg
 Pkg.activate("GRNSim/")
-import GRNSim
 
 using Distributed
 using Distributions

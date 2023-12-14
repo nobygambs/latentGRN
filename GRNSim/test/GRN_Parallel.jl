@@ -1,7 +1,6 @@
 ## Set up workspace
 using Pkg
 Pkg.activate("GRNSim/")
-import GRNSim
 
 using Distributed
 @everywhere using Dates
@@ -49,7 +48,7 @@ using Distributed
     y_fin = SharedArray{Float64}(n_tf, n_iter)
 
     ## Iterate n_iter times
-    @distributed for iter = 1:n_iter
+    @sync @distributed for iter = 1:n_iter
 
         ## Reset simulation
         y0 = zeros(n_tf, 1)
@@ -70,12 +69,6 @@ using Distributed
         ## Store final value / steady-state
         y_fin[:, iter] = y[:, end]
 
-        if plots_on
-            p_iter = plot(t, y', legend = false)
-            display(p_iter)
-            sleep(1)
-        end
-
     end
 
     return y_fin
@@ -83,26 +76,15 @@ using Distributed
 end
 
 t_start = now()
-result_address = RunGRN()
+result = RunGRN(; ncores = 8, n_tf = 100, n_iter = 1000)
 t_end = now()
 elapsed = canonicalize(t_end - t_start)
-y_fin = fetch(result_address)
-
-
-print("\n")
-#print(elapsed)
-#print("\n")
-#print(result_address)
-#print("\n\n\n\n")
-
-
-
+print("\n"); print(elapsed); print("\n")
 
 ## PCA of equlibria (final states)
-#fin_svd = svd(y_fin)
-#p_pca = plot(fin_svd.V[:, 1], fin_svd.V[:, 2], seriestype=:scatter, legend = false)
-#display(p_pca)
-#sleep(10000)
+fin_svd = svd(result)
+p_pca = plot(fin_svd.V[:, 1], fin_svd.V[:, 2], seriestype=:scatter, legend = false)
+display(p_pca)
 
 
 
