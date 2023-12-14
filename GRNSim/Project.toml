@@ -1,3 +1,8 @@
+name = "GRNSim"
+uuid = "01f75e18-be47-4a76-b584-9a5d33d993c8"
+authors = ["Noah <ngamble@uchicago.edu>"]
+version = "0.1.0"
+
 [deps]
 Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
