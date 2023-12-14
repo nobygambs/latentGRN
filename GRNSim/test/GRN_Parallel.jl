@@ -1,5 +1,5 @@
 ## Set up workspace
-using Pkg
+import Pkg
 Pkg.activate("GRNSim/")
 
 using Distributed
@@ -12,7 +12,7 @@ using Distributed
 @everywhere using SharedArrays
 @everywhere using StatsBase
 
-Random.seed!(rng_seed)
+Random.seed!(2024)
 
 ## Define GRNSim function
 function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, rng_seed = 2024, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
@@ -75,11 +75,12 @@ function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, rng_seed =
 
 end
 
+## Run and time simultation
 t_start = now()
 result = RunGRN(; ncores = 8)
 t_end = now()
 elapsed = canonicalize(t_end - t_start)
-print("\n"); print(elapsed); print("\n")
+print("\n"); print(elapsed); print("\n\n")
 
 ## PCA of equlibria (final states)
 fin_svd = svd(result)
