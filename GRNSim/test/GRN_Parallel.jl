@@ -1,6 +1,6 @@
 ## Set up workspace
-import Pkg
-Pkg.activate("GRNSim/")
+#import Pkg
+#Pkg.activate("GRNSim/")
 
 using Distributed
 @everywhere using Dates
