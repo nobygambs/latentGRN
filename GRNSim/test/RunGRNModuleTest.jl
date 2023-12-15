@@ -1,6 +1,8 @@
 ## Set up workspace
 import Pkg
 Pkg.activate("GRNSim/")
+using GRNSim
+using Dates
 
 ## Run GRN simulator
 t_start = now()

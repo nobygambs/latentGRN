@@ -40,6 +40,18 @@ end
 
 function RunGRN(; n_tf = 100, n_iter = 1000, sparsity = 0, bias = -1, ncores = 1, t_max = 500, dt = 0.1, beta_0 = 1, delta_0 = 0.125, noise_start = 20, noise_end = 40, plots_on = false)
 
+    ## Set up parallel pool
+    procs = Distributed.addprocs(ncores)
+    project_path = splitdir(Pkg.project().path)[1]
+    Distributed.@everywhere procs begin
+        Main.eval(quote
+            import Pkg
+            Pkg.activate($$project_path)
+			import GRNSim
+        end)
+    end
+    #Distributed.pmap(_->println("Finished setting up worker " * string(Distributed.myid())), Distributed.WorkerPool(procs), 1:ncores)
+
     ## Define interaction matrix, parameters, functions
     #### Interaction matrix
     M = randn(n_tf, n_tf) .+ bias
